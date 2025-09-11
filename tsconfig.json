@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Módulo y target */
+    "module": "commonjs",
+    "target": "ES2022", // Cambia a "ES2023" si actualizas TypeScript >= 5.0
+    /* Generación de archivos */
+    "outDir": "./dist",
+    "declaration": true,
+    "sourceMap": true,
+    "removeComments": true,
+    /* Decoradores (necesarios para NestJS) */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    /* Imports */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true, // <-- recomendado para imports más fáciles
+    /* Revisión de tipos y seguridad */
+    "strict": true, // activa todas las validaciones estrictas
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    /* Opcional: compilación incremental para acelerar builds */
+    "incremental": true,
+    /* Base path para imports absolutos */
+    "baseUrl": "./"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
