@@ -17,9 +17,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // ===========================
+  
   // LOGIN - Email o Username
-  // ===========================
   async login(identifier: string, password: string) {
     try {
       if (!identifier) {
@@ -59,9 +58,9 @@ export class AuthService {
     }
   }
 
-  // ===========================
+
   // SIGNUP - Registro con Email o Username
-  // ===========================
+
   async signUp(identifier: string, password: string, confirmPassword?: string) {
     try {
       // Validación de contraseñas
@@ -99,11 +98,17 @@ export class AuthService {
         },
       });
 
-      // Generar token limpio
-      const { password: _, ...userWithoutPassword } = newUser;
-      const access_token = await this.jwtService.signAsync(userWithoutPassword);
+      // Generar token limpio con username o email
+      const cleanUser = {
+        id: newUser.id,
+        username: newUser.username ?? newUser.email, // Usa username si existe, si no el email
+        email: newUser.email,
+      };
+
+      const access_token = await this.jwtService.signAsync(cleanUser);
 
       return { access_token };
+
     } catch (error: unknown) {
       // 🔥 Mostrar el error completo para depuración
       console.error('🔥 ERROR COMPLETO:', error);

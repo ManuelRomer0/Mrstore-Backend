@@ -34,6 +34,7 @@ export class AuthController {
     // SIGN UP
     // =======================
     @HttpCode(HttpStatus.CREATED)
+    
     @Post('sign-up')
     signUp(@Body() user: SignUpDto) {
         console.log('Datos recibidos para registro:', user);
