@@ -1,38 +1,49 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class LoginDto {
-    @IsString()
-    @IsNotEmpty()
-    identifier!: string;
+  @IsString()
+  @IsNotEmpty()
+  identifier: string;
 
-    @IsString()
-    @MinLength(6)
-    password!: string;
+  @IsString()
+  @MinLength(6)
+  password: string;
 }
 
 export class SignUpDto {
-    @IsString()
-    @IsNotEmpty()
-    identifier!: string;
+  @IsString()
+  @IsNotEmpty()
+  username: string;
 
-    @IsString()
-    @MinLength(6)
-    password!: string;
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    confirmPassword!: string;
+  @IsString()
+  @MinLength(6)
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
 }
 export class UserDto {
-    @IsOptional()
-    @IsString()
-    username?: string;
+  @IsOptional()
+  @IsString()
+  username?: string;
 
-    @IsOptional()
-    @IsEmail()
-    email?: string;
+  @IsOptional()
+  @IsEmail()
+  email?: string;
 
-    @IsOptional()
-    @MinLength(6)
-    password?: string;
+  @IsOptional()
+  @MinLength(6)
+  password?: string;
 }

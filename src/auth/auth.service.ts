@@ -9,6 +9,7 @@ import { compare, encrypt } from 'src/libs/bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UserDto } from './dto/user.dto';
+import { SignUpDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -62,25 +63,26 @@ export class AuthService {
   // ===========================
   // SIGNUP - Registro con Email o Username
   // ===========================
-  async signUp(identifier: string, password: string, confirmPassword?: string) {
+  async signUp(user: SignUpDto) {
     try {
       // Validación de contraseñas
-      if (password !== confirmPassword) {
+      if (user.password !== user.confirmPassword) {
         throw new BadRequestException('Las contraseñas no coinciden');
       }
 
-      if (!identifier) {
+      if (!user.username) {
+        throw new BadRequestException('Debe proporcionar un nombre de usuario');
+      }
+
+      if (!user.email) {
         throw new BadRequestException(
-          'Debe proporcionar un correo electrónico o un nombre de usuario',
+          'Debe proporcionar un correo electrónico',
         );
       }
 
-      // Detectar si es email
-      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
-
       // Verificar si el usuario ya existe
       const existingUser = await this.prismaService.user.findFirst({
-        where: isEmail ? { email: identifier } : { username: identifier },
+        where: { email: user.email, username: user.username },
       });
 
       if (existingUser) {
@@ -88,13 +90,13 @@ export class AuthService {
       }
 
       // Encriptar contraseña
-      const hashedPassword = await encrypt(password);
+      const hashedPassword = await encrypt(user.password);
 
       // Crear usuario
       const newUser = await this.prismaService.user.create({
         data: {
-          email: isEmail ? identifier : null,
-          username: !isEmail ? identifier : null,
+          username: user.username,
+          email: user.email,
           password: hashedPassword,
         },
       });
