@@ -23,7 +23,7 @@ async function bootstrap(
   }
   return app;
 }
-bootstrap();
+bootstrap(undefined, Number(process.env.PORT));
 export async function createApp(expressApp: Express) {
   return bootstrap(expressApp);
 }

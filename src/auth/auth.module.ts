@@ -12,7 +12,7 @@ export interface LoginResponse {
   imports: [PrismaModule,
     JwtModule.register({
     global: true,
-    secret: process.env.secret,
+    secret: process.env.SECRET,
     signOptions: { expiresIn: '24h' },
   }),],
   controllers: [AuthController],

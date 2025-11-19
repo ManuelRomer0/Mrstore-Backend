@@ -1,6 +1,6 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: MrStore
-service: builder-backend
+service: MrStore-backend
 
 frameworkVersion: '4'
 
@@ -8,9 +8,9 @@ provider:
   name: aws
   runtime: nodejs20.x
   architecture: arm64
-  stage: ${opt:stage,'dev'}
-  region: sa-east-1
-  memorySize: ${self:custom.MEMORYSIZE.${self:provider.stage}}
+  stage: main
+  region: us-east-2
+  memorySize: ${ssm:LAMBDA_MEMORYSIZE}
   logRetentionInDays: 1
   timeout: 10
   apiGateway:
@@ -21,17 +21,6 @@ package:
   patterns:
     - '!**'
     - 'dist/**'
-
-custom:
-  stages:
-    - dev
-    - prd
-  MEMORYSIZE:
-    dev: ${ssm:LAMBDA_MEMORYSIZE_DEV}
-    prd: ${ssm:LAMBDA_MEMORYSIZE_PRD}
-  PORT:
-    dev: 3000
-    prd: 8080
 
 functions:
   api:
@@ -44,9 +33,8 @@ functions:
           path: /{proxy+}
           method: ANY
     environment:
-      NODE_ENV: ${self:provider.stage}
-      PORT: ${self:custom.PORT.${self:provider.stage}}
-      ERROR_LOGS: true
+      SECRET: ${ssm:SECRET}
+      PORT: 8080
 
 plugins:
   - serverless-jetpack
