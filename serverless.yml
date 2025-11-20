@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: MrStore
+org: mrstore
 service: MrStore-backend
 
 frameworkVersion: '4'
