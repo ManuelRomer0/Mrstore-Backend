@@ -59,9 +59,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: serverless deploy --stage ${{github.ref_name}}
 
-      - name: Deploy Serverless
-        run: serverless deploy --stage prod
-
       # --- [ PASO CLAVE: INVOCAR LA LAMBDA DE MIGRACIÓN ] ---
       # Esto solo funciona si ya tienes la función 'migrationHandler' configurada en tu serverless.yml
       - name: Run Prisma Migrations
