@@ -108,7 +108,7 @@ export class AuthService {
       const access_token = await this.jwtService.signAsync(cleanUser);
 
       return { access_token };
-    } catch (error: unknown) {
+    } catch (error: any) {
       // 🔥 Mostrar el error completo para depuración
       console.error('🔥 ERROR COMPLETO:', error);
 
