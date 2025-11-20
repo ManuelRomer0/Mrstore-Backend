@@ -20,16 +20,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # --- [ CONFIGURACIÓN DE AWS - NECESARIO PARA EL ÚLTIMO PASO ] ---
-      # Usamos la acción oficial para configurar las credenciales, es más limpia
-      # que solo pasarlas como variables de entorno.
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
-
       - name: Install serverless globally
         run: npm install -g serverless
 
