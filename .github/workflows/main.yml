@@ -64,7 +64,7 @@ jobs:
       - name: Run Prisma Migrations via VPC Lambda
         run: |
           STAGE=${{ github.ref_name }}
-          FUNCTION_NAME="mrstore-backend-${STAGE}-migrationHandler"
+          FUNCTION_NAME="MrStore-backend-${STAGE}-migrationHandler"
           echo "Invocando Lambda de migración: $FUNCTION_NAME"
 
           # 'aws lambda invoke' ejecuta el código de migración dentro de la VPC.
@@ -74,6 +74,7 @@ jobs:
             --cli-binary-format raw-in-base64-out \
             --log-type Tail \
             --payload "{}" \
+            --region us-east-2 \
             response.json
 
           # Opcional: Revisar si la Lambda de migración devolvió un error (código != 200)
