@@ -72,24 +72,5 @@ jobs:
 
       # --- [ PASO CLAVE: INVOCAR LA LAMBDA DE MIGRACIÓN ] ---
       # Esto solo funciona si ya tienes la función 'migrationHandler' configurada en tu serverless.yml
-      - name: Run Prisma Migrations via VPC Lambda
-        run: |
-          STAGE=${{ github.ref_name }}
-          FUNCTION_NAME="mrstore-backend-${STAGE}-migrationHandler"
-          echo "Invocando Lambda de migración: $FUNCTION_NAME"
-
-          # 'aws lambda invoke' ejecuta el código de migración dentro de la VPC.
-          aws lambda invoke \
-            --function-name $FUNCTION_NAME \
-            --invocation-type RequestResponse \
-            --cli-binary-format raw-in-base64-out \
-            --log-type Tail \
-            --payload "{}" \
-            response.json
-
-          # Opcional: Revisar si la Lambda de migración devolvió un error (código != 200)
-          if [ $(jq -r '.StatusCode' response.json) != "200" ]; then
-             echo "Error al ejecutar la Lambda de migración. Revisar logs."
-             exit 1
-          fi
-        # Nota: Ya no necesitamos pasar las claves de AWS aquí porque las configuramos globalmente arriba.
+      - name: Run Prisma Migrations
+        run: npx prisma migrate deploy

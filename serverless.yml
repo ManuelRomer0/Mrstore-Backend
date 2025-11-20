@@ -31,11 +31,6 @@ provider:
       - subnet-070ca18731522c079
       - subnet-00eff1bd15347203c
 
-  deploymentBucket:
-    name: mrstore-deploy-migrations # Usa el nombre de tu nuevo bucket
-    # Esta opción asegura que CloudFormation también pueda escribir.
-    serverSideEncryption: AES256
-
 package:
   excludeDevDependencies: true
   patterns:
@@ -56,11 +51,6 @@ functions:
       SECRET: ${ssm:SECRET}
       PORT: 8080
       DATABASE_URL: ${ssm:DATABASE_URL}
-
-  migrationHandler:
-    handler: migrationHandler.run
-    timeout: 300 # Dar suficiente tiempo para migraciones grandes (hasta 15 min máximo)
-    memorySize: 512
 
 plugins:
   - serverless-jetpack
