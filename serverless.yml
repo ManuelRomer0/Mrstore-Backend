@@ -8,7 +8,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   architecture: arm64
-  #stage: main
+  stage: main
   region: us-east-2
   memorySize: ${ssm:LAMBDA_MEMORYSIZE}
   logRetentionInDays: 1
@@ -35,8 +35,9 @@ functions:
     environment:
       SECRET: ${ssm:SECRET}
       PORT: 8080
+      DATABASE_URL: ${ssm:DATABASE_URL}
 
 plugins:
   - serverless-jetpack
   - serverless-offline
-  - serverless-stage-manager
+  #- serverless-stage-manager
