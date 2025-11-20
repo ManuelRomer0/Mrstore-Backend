@@ -32,7 +32,7 @@ provider:
       - subnet-00eff1bd15347203c
 
   deploymentBucket:
-    name: serverless-framework-deployments-us-east-2-c573f76d-1912 # Usa el nombre de tu nuevo bucket
+    name: mrstore-deploy-migrations # Usa el nombre de tu nuevo bucket
     # Esta opción asegura que CloudFormation también pueda escribir.
     serverSideEncryption: AES256
 
