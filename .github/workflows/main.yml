@@ -42,9 +42,9 @@ jobs:
         run: npm ci
 
       - name: Prisma Configuration
-        run: npm run prisma:generate && npm run prisma:migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run prisma:generate && npm run prisma:migrate
 
       - name: nest build
         run: npm run build
