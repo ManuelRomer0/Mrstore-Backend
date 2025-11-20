@@ -7,15 +7,15 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { compare, encrypt } from 'src/libs/bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../generated/prisma/client';
 import { UserDto } from './dto/user.dto';
 import { SignUpDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prismaService: PrismaService,
-    private jwtService: JwtService,
+    private readonly prismaService: PrismaService,
+    private readonly jwtService: JwtService,
   ) {}
 
   // LOGIN - Email o Username
