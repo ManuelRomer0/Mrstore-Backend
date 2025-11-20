@@ -29,6 +29,7 @@ provider:
       # donde se encuentra tu RDS o donde se pueden crear las ENI.
       - subnet-0002554d5c150b951
       - subnet-070ca18731522c079
+      - subnet-00eff1bd15347203c
 
 package:
   excludeDevDependencies: true
@@ -50,6 +51,15 @@ functions:
       SECRET: ${ssm:SECRET}
       PORT: 8080
       DATABASE_URL: ${ssm:DATABASE_URL}
+
+  migrationHandler:
+    handler: migrationHandler.run
+    timeout: 300 # Dar suficiente tiempo para migraciones grandes (hasta 15 min máximo)
+    memorySize: 512
+    # El evento puede ser 'none' ya que solo la invocaremos desde CI/CD
+    events:
+      - custom: # Ejemplo de evento dummy si es necesario
+          type: none
 
 plugins:
   - serverless-jetpack

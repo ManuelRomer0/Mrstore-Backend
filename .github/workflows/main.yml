@@ -20,6 +20,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # --- [ CONFIGURACIÓN DE AWS - NECESARIO PARA EL ÚLTIMO PASO ] ---
+      # Usamos la acción oficial para configurar las credenciales, es más limpia
+      # que solo pasarlas como variables de entorno.
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
       - name: Install serverless globally
         run: npm install -g serverless
 
@@ -41,10 +51,13 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Prisma Configuration
+      # --- [ CAMBIO CLAVE: SOLO GENERAR, NO MIGRAR ] ---
+      # Ejecutamos 'prisma generate' para crear el cliente, pero quitamos 'prisma:migrate'
+      # porque FALLARÍA aquí.
+      - name: Prisma Configuration (Generate Client)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run prisma:generate && npm run prisma:migrate
+        run: npm run prisma:generate
 
       - name: nest build
         run: npm run build
@@ -52,6 +65,31 @@ jobs:
       - name: Deploy lambda function
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: serverless deploy --stage ${{github.ref_name}}
+
+      - name: Deploy Serverless
+        run: serverless deploy --stage prod
+
+      # --- [ PASO CLAVE: INVOCAR LA LAMBDA DE MIGRACIÓN ] ---
+      # Esto solo funciona si ya tienes la función 'migrationHandler' configurada en tu serverless.yml
+      - name: Run Prisma Migrations via VPC Lambda
+        run: |
+          STAGE=${{ github.ref_name }}
+          FUNCTION_NAME="mrstore-backend-${STAGE}-migrationHandler"
+          echo "Invocando Lambda de migración: $FUNCTION_NAME"
+
+          # 'aws lambda invoke' ejecuta el código de migración dentro de la VPC.
+          aws lambda invoke \
+            --function-name $FUNCTION_NAME \
+            --invocation-type RequestResponse \
+            --cli-binary-format raw-in-base64-out \
+            --log-type Tail \
+            --payload "{}" \
+            response.json
+
+          # Opcional: Revisar si la Lambda de migración devolvió un error (código != 200)
+          if [ $(jq -r '.StatusCode' response.json) != "200" ]; then
+             echo "Error al ejecutar la Lambda de migración. Revisar logs."
+             exit 1
+          fi
+        # Nota: Ya no necesitamos pasar las claves de AWS aquí porque las configuramos globalmente arriba.
