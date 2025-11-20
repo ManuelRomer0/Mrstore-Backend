@@ -31,6 +31,11 @@ provider:
       - subnet-070ca18731522c079
       - subnet-00eff1bd15347203c
 
+  deploymentBucket:
+    name: serverless-framework-deployments-us-east-2-c573f76d-1912 # Usa el nombre de tu nuevo bucket
+    # Esta opción asegura que CloudFormation también pueda escribir.
+    serverSideEncryption: AES256
+
 package:
   excludeDevDependencies: true
   patterns:
@@ -56,10 +61,6 @@ functions:
     handler: migrationHandler.run
     timeout: 300 # Dar suficiente tiempo para migraciones grandes (hasta 15 min máximo)
     memorySize: 512
-    # El evento puede ser 'none' ya que solo la invocaremos desde CI/CD
-    events:
-      - custom: # Ejemplo de evento dummy si es necesario
-          type: none
 
 plugins:
   - serverless-jetpack
