@@ -62,4 +62,6 @@ jobs:
       # --- [ PASO CLAVE: INVOCAR LA LAMBDA DE MIGRACIÓN ] ---
       # Esto solo funciona si ya tienes la función 'migrationHandler' configurada en tu serverless.yml
       - name: Run Prisma Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
