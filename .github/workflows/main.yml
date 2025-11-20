@@ -51,5 +51,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: serverless deploy --stage ${{github.ref_name}}
 
-      - name: migrations db
-        run : npm run prisma:migrate
+      - name: Prisma Configuration
+        run: npm run prisma:generate && npm run prisma:migrate
