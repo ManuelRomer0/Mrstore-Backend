@@ -59,6 +59,16 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: serverless deploy --stage ${{github.ref_name}}
 
+      # --- [ CONFIGURACIÓN DE AWS - NECESARIO PARA EL ÚLTIMO PASO ] ---
+      # Usamos la acción oficial para configurar las credenciales, es más limpia
+      # que solo pasarlas como variables de entorno.
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 # Reemplaza con tu región
+
       # --- [ PASO CLAVE: INVOCAR LA LAMBDA DE MIGRACIÓN ] ---
       # Esto solo funciona si ya tienes la función 'migrationHandler' configurada en tu serverless.yml
       - name: Run Prisma Migrations via VPC Lambda
