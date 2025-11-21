@@ -36,8 +36,6 @@ package:
 functions:
   api:
     handler: dist/src/lambda.handler
-    url:
-      cors: true
     events:
       - http:
           path: /
