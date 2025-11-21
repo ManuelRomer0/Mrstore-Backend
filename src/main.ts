@@ -1,28 +1,24 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { Express } from 'express';
-import { ExpressAdapter } from '@nestjs/platform-express';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
 
 async function bootstrap(
   expressApp: Express | undefined = undefined,
   port: number | undefined = undefined,
 ) {
-  const app = await NestFactory.create(
+  const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     new ExpressAdapter(expressApp),
-    {
-      cors: {
-        origin: '*',
-        methods: 'GET,POST,OPTIONS',
-        allowedHeaders:
-          'Content-Type, Accept, Authorization, X-Requested-With, Application, Origin, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods',
-      },
-    },
   );
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
   );
+  app.enableCors({ origin: '*' });
 
   if (port) {
     await app.listen(port);
@@ -32,6 +28,8 @@ async function bootstrap(
 
 bootstrap(undefined, Number(process.env.PORT));
 
-export async function createApp(expressApp: Express) {
+export async function createApp(
+  expressApp: Express,
+): Promise<INestApplication> {
   return bootstrap(expressApp);
 }
