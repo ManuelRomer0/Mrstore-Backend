@@ -10,17 +10,6 @@
       "username": "postgres",
       "database": "n8n",
       "password": "JESUS@dsr@004"
-    },
-    {
-      "ssh": "Disabled",
-      "previewLimit": 50,
-      "server": "mrstoredb.ct6wi8y6eq5g.us-east-2.rds.amazonaws.com",
-      "port": 5432,
-      "driver": "PostgreSQL",
-      "name": "MrStore_cloud",
-      "database": "mrstore_db",
-      "username": "postgres",
-      "password": "1002033791"
     }
   ]
 }
