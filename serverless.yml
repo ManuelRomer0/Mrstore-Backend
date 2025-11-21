@@ -20,12 +20,12 @@ provider:
     DATABASE_URL: ${ssm:DATABASE_URL}
 
   vpc:
-    - securityGroupIds:
-        - ${ssm:SECURITY_GROUP_ID}
-      subnetIds:
-        - ${ssm:SUBNET_ID_1}
-        - ${ssm:SUBNET_ID_2}
-        - ${ssm:SUBNET_ID_3}
+    securityGroupIds:
+      - ${ssm:SECURITY_GROUP_ID}
+    subnetIds:
+      - ${ssm:SUBNET_ID_1}
+      - ${ssm:SUBNET_ID_2}
+      - ${ssm:SUBNET_ID_3}
 
 package:
   excludeDevDependencies: true
@@ -36,6 +36,8 @@ package:
 functions:
   api:
     handler: dist/src/lambda.handler
+    url:
+      cors: true
     events:
       - http:
           path: /
