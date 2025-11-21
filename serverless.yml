@@ -16,6 +16,17 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
+  environment:
+    DATABASE_URL: ${ssm:DATABASE_URL}
+
+  vpc:
+    - securityGroupIds:
+        - ${ssm:SECURITY_GROUP_ID}
+      subnetIds:
+        - ${ssm:SUBNET_ID_1}
+        - ${ssm:SUBNET_ID_2}
+        - ${ssm:SUBNET_ID_3}
+
 package:
   excludeDevDependencies: true
   patterns:
