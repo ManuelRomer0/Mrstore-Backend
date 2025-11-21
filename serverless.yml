@@ -52,19 +52,6 @@ functions:
       PORT: 8080
       DATABASE_URL: ${ssm:DATABASE_URL}
 
-  migrationHandler:
-    handler: migrationHandler.run
-    timeout: 100
-    vpc:
-      securityGroupIds:
-        - sg-0dfc274c80ee01575
-      subnetIds:
-        - subnet-0002554d5c150b951
-        - subnet-070ca18731522c079
-        - subnet-00eff1bd15347203c
-    environment:
-      DATABASE_URL: ${ssm:DATABASE_URL}
-
 plugins:
   - serverless-jetpack
   - serverless-offline
