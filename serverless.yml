@@ -54,7 +54,7 @@ functions:
 
   migrationHandler:
     handler: migrationHandler.run
-    timeout: 30
+    timeout: 100
     vpc:
       securityGroupIds:
         - sg-0dfc274c80ee01575
