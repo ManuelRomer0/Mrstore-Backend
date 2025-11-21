@@ -44,7 +44,7 @@ jobs:
       - name: Prisma Configuration (Generate Client)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma generate
+        run: npm run prisma:generate
 
       - name: nest build
         run: npm run build

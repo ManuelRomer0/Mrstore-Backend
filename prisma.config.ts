@@ -1,4 +1,4 @@
-import { defineConfig } from 'prisma/config';
+import { defineConfig, env } from 'prisma/config';
 import 'dotenv/config';
 
 export default defineConfig({
@@ -8,6 +8,6 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: 'postgres://postgres:1002033791@mrstoredb.ct6wi8y6eq5g.us-east-2.rds.amazonaws.com:5432/mrstore_db?schema=public',
+    url: env('DATABASE_URL'),
   },
 });

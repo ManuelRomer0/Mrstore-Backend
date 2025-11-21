@@ -16,9 +16,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
-  environment:
-    DATABASE_URL: ${ssm:DATABASE_URL}
-
   vpc:
     securityGroupIds:
       - ${ssm:SECURITY_GROUP_ID}
