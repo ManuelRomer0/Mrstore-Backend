@@ -8,6 +8,6 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: process.env.DATABASEURL!,
+    url: 'postgres://postgres:1002033791@mrstoredb.ct6wi8y6eq5g.us-east-2.rds.amazonaws.com:5432/mrstore_db?schema=public',
   },
 });
