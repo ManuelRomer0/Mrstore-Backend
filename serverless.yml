@@ -16,21 +16,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
-    # 🔑 ESTO ES LO CRÍTICO: Configuración de la VPC
-  vpc:
-    securityGroupIds:
-      # 1. Grupo de Seguridad de Lambda
-      # Este grupo DEBE permitir tráfico de SALIDA (outbound)
-      # hacia el puerto 5432 (PostgreSQL) para conectarse a RDS.
-      - sg-0dfc274c80ee01575
-    subnetIds:
-      # 2. Las subredes de tu VPC
-      # Deben ser subredes PRIVADAS (sin acceso directo a internet)
-      # donde se encuentra tu RDS o donde se pueden crear las ENI.
-      - subnet-0002554d5c150b951
-      - subnet-070ca18731522c079
-      - subnet-00eff1bd15347203c
-
 package:
   excludeDevDependencies: true
   patterns:
